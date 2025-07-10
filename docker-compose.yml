@@ -1,0 +1,21 @@
+version: '3.8'
+services:
+  redis:
+    image: redis:7-alpine
+    container_name: fantasy-redis
+    ports:
+      - "6379:6379"
+    # For production, use a managed Redis and set REDIS_URL accordingly
+
+  backend:
+    build: ./backend
+    container_name: fantasy-backend
+    ports:
+      - "3000:3000"
+    environment:
+      - REDIS_URL=redis://redis:6379
+      - NODE_ENV=production
+      - JWT_SECRET=supersecretkey_4e8f7c2b1a9d
+    depends_on:
+      - redis
+    # Add other environment variables as needed (e.g., DB, JWT secret) 
